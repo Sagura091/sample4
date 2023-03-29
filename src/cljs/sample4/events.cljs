@@ -3,17 +3,30 @@
     [re-frame.core :as rf]
     [ajax.core :as ajax]
     [reitit.frontend.easy :as rfe]
-    [reitit.frontend.controllers :as rfc]))
+    [re-frame.db :as db]
+    [reitit.frontend.controllers :as rfc]
+    [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
-;;dispatchers
+
+
+
+(rf/reg-event-db
+  :initialise-db                                            ;; usage: (dispatch [:initialise-db])
+  (fn [_ _]                                                 ;; Ignore both params (db and event)
+    {:Name              "Math Database"                   ;; return a new value for app-db
+     :History-Equations [{:id (inc 0) :x 1 :equation-map {:eq "-" :text "minus"} :y 4 :Total -3}]
+     :Temp-Equation     {:x 0 :equation-map {:eq "-" :text "minus"} :y 0 :Total 0}
+     :Active-state      "calculator"}))
+
+
 
 (rf/reg-event-db
   :common/navigate
   (fn [db [_ match]]
     (let [old-match (:common/route db)
           new-match (assoc match :controllers
-                                 (rfc/apply-controllers (:controllers old-match) match))]
-      (assoc db :common/route new-match))))
+                               (rfc/apply-controllers (:controllers old-match) match))]
+         (assoc db :common/route new-match))))
 
 (rf/reg-fx
   :common/navigate-fx!
@@ -30,13 +43,99 @@
   (fn [db [_ docs]]
     (assoc db :docs docs)))
 
+; this is a event to store the equation and total to the database for re-frame
+; :set-eq is the name of the event you are going to call in another file to send the event
+; db - is the atom and the non-refresh database to store items
+; eq is a equation it is a hash map containing {id ,x,eq,y,total}
+(rf/reg-event-db
+  :set-eq
+  (fn-traced [db [_ eq]]
+             (conj (:History-Equations db) eq)))
+
+; this is a re-frame handler to grab from the server then send it to the :set-eq event.
+; :Get-Total-Eq-From-Server is the name of the handle that you pass in.
+; xeqy is a hasmap consisting of (:x, :eq, :y), eventually this handler will add total to the hash
+; map
+; After we do a get and the server sends us back a total we assoc it to add it to the hash map.
+; then with the handler of the get we send an event :set-eq to set that equation that was produced
+; by the user to a database called db
+
+;(rf/reg-event-db
+;  :blah-response
+;  (fn [db [_ eventnumber result]]
+;    (assoc-in db [:Equation eventnumber :total] result)))
+
+(comment
+
+  (def m {:temp-eq {:x 0}})
+  (def test2 {:eq [{:x 10 :y 10}] :temp {:x 10 :y 12}})
+  (def test3 {:testw 24})
+  (test3 :testw)
+  (get-in (get m :temp-eq :x))
+  (assoc-in m [:temp-eq :x] 11)
+
+  ; (def test2 {:eq [{:x 10 :y 10}] :temp {:x 10 :y 12}})
+  ;(into [:eq (:temp test2)])
+  (conj (test2 :eq) {:d 0 :x 0})
+
+  (assoc-in test2 [:eq] (:temp test2))
+
+
+
+
+  @re-frame.db/app-db
+  ()
+
+  ())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(rf/reg-event-fx
+  :Get-Total-Eq-From-Server
+  (fn-traced [{:keys [db]} [_ a]]
+             (println (get-in db [:Temp-Equation :equation-map :text]))
+             (println (str "/api/math/" (get-in db [:Temp-Equation :equation-map :text])))
+             ;   (println (str "/api/math/" (get-in arithmatic [1 :a])))
+             {:http-xhrio {:method          :get
+                           :uri             (str "/api/math/" (get-in db [:Temp-Equation :equation-map :text]))
+                           :url-params      {:x (js/parseInt (get-in db [:Temp-Equation :x]))
+                                             :y (js/parseInt (get-in db [:Temp-Equation :y]))}
+                           :format          (ajax/json-request-format)
+                           :response-format (ajax/json-response-format {:keywords? true})
+                           :on-success      [:setTempDataTotal]
+                           :on-failure      (fn [r] js/alert r)}}))
+
+
+
+(rf/reg-event-fx
+  :setTempDataTotal
+  (fn-traced [{:keys [db]} [_ a]]
+             {:db       (assoc-in db [:Temp-Equation :Total] (:total a))
+              :dispatch [:addToEquationHistory]}))
+
 (rf/reg-event-fx
   :fetch-docs
   (fn [_ _]
     {:http-xhrio {:method          :get
                   :uri             "/docs"
                   :response-format (ajax/raw-response-format)
-                  :on-success       [:set-docs]}}))
+                  :on-success      [:set-docs]}}))
 
 (rf/reg-event-db
   :common/set-error
@@ -48,12 +147,49 @@
   (fn [_ _]
     {:dispatch [:fetch-docs]}))
 
+(rf/reg-event-db
+  :setTempDataX
+  (fn-traced [db [_ x]]
+             (assoc-in db [:Temp-Equation :x] x)))
+
+
+
+(rf/reg-event-db
+  :setTempDataY
+  (fn-traced [db [_ y]]
+             (assoc-in db [:Temp-Equation :y] y)))
+
+(rf/reg-event-db
+  :setTempDataEquation
+  (fn-traced [db [_ eq]]
+             (assoc-in db [:Temp-Equation :equation-map] eq)))
+
+(rf/reg-event-db
+  :switch-active-state
+  (fn-traced [db [_ switch]]
+             (assoc-in db [:Active-state] switch)))
+
+
+(rf/reg-event-db
+  :addToEquationHistory
+  (fn-traced [db [_ _total]]
+             (let [add (:Temp-Equation db)]
+               (assoc-in db [:History-Equations (count (:History-Equations db))] add))))
+; (conj (db :Temp-Equation) add))))
+
+;(reset! db)))
 ;;subscriptions
+
 
 (rf/reg-sub
   :common/route
   (fn [db _]
     (-> db :common/route)))
+
+(rf/reg-sub
+  :Equation
+  (fn [db _]
+    (-> db :id)))
 
 (rf/reg-sub
   :common/page-id
@@ -66,6 +202,22 @@
   :<- [:common/route]
   (fn [route _]
     (-> route :data :view)))
+
+(rf/reg-sub
+  :Active-state
+  (fn-traced [db _]
+             (:Active-state db)))
+
+(rf/reg-sub
+  :get-history
+  (fn-traced [db _]
+             (:History-Equations db)))
+
+(rf/reg-sub
+  :Get-Total
+  (fn-traced [db _]
+             (:Total (:Temp-Equation db))))
+
 
 (rf/reg-sub
   :docs
