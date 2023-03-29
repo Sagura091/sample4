@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Leiningen: clojure.java-time:1.1.0">
-    <CLASSES>
-      <root url="jar://$USER_HOME$/.m2/repository/clojure/java-time/clojure.java-time/1.1.0/clojure.java-time-1.1.0.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
