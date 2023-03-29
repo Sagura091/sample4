@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Leiningen: com.mchange/c3p0:0.9.5.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/mchange/c3p0/0.9.5.2/c3p0-0.9.5.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
