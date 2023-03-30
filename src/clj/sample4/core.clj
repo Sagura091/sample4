@@ -6,7 +6,8 @@
     [sample4.config :refer [env]]
     [clojure.tools.cli :refer [parse-opts]]
     [clojure.tools.logging :as log]
-    [mount.core :as mount])
+    [mount.core :as mount]
+    [sample4.corekafka :as kafka])
   (:gen-class))
 
 ;; log uncaught exceptions in threads
@@ -56,4 +57,6 @@
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]
+  ;;(->(kafka/start!))
+  ;(kafka/read-message)
   (start-app args))

@@ -5,6 +5,8 @@
     [reitit.frontend.easy :as rfe]
     [re-frame.db :as db]
     [reitit.frontend.controllers :as rfc]
+    [sample4.corekafka :as kafka]
+    [sample4.corekafka :as kafka]
     [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
 
@@ -174,6 +176,7 @@
   :addToEquationHistory
   (fn-traced [db [_ _total]]
              (let [add (:Temp-Equation db)]
+               (kafka/math-problem-calculate! add)
                (assoc-in db [:History-Equations (count (:History-Equations db))] add))))
 ; (conj (db :Temp-Equation) add))))
 
