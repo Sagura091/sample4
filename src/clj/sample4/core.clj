@@ -7,7 +7,9 @@
     [clojure.tools.cli :refer [parse-opts]]
     [clojure.tools.logging :as log]
     [mount.core :as mount]
-    [sample4.corekafka :as kafka])
+    [sample4.SenteWebsocket.server :as ws-server]
+    [sample4.corekafka :as kafka]
+    [sample4.SenteWebsocket :as jettyS])
   (:gen-class))
 
 ;; log uncaught exceptions in threads
@@ -46,6 +48,8 @@
 (defn stop-app []
   (doseq [component (:stopped (mount/stop))]
     (log/info component "stopped"))
+  (ws-server/stop!)
+  (kafka/stop!)
   (shutdown-agents))
 
 (defn start-app [args]
@@ -57,6 +61,7 @@
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]
-  ;;(->(kafka/start!))
+  (ws-server/start!)
+  (->(kafka/start!))
   ;(kafka/read-message)
   (start-app args))

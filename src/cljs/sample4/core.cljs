@@ -9,10 +9,21 @@
     [markdown.core :refer [md->html]]
     [sample4.ajax :as ajax]
     [sample4.events]
+    [sample4.sockets :as client-socket]
+    [sample4.handler]
+    [lambdaisland.glogi :as log]
+    [lambdaisland.glogi.console :as glogi-console]
     [reitit.core :as reitit]
     [reitit.frontend.easy :as rfe]
     [clojure.string :as string])
   (:import goog.History))
+
+
+
+
+
+
+
 
 (defn nav-link [uri title page]
   [:a.navbar-item
@@ -102,19 +113,35 @@
   (get-in vec-map [0 :equation :eq])
   (:eq vec-map)
 
+
+
+
+
+  (def mapA [[1 {:a 12 :b 23}]
+   [2 {:a 12 :b 23}]
+  [3 {:a 12 :b 23}]
+   ])
+  (println mapA)
+  (doseq [[i k] mapA]
+    (doseq [[key val] k]
+      (print key))
+    (println k))
+
   ())
 
 
 (defn History-list []
-  (println @(rf/subscribe [:get-history]))
-  (println (get-in @(rf/subscribe [:get-history]) [0 :equation-map :eq]))
-  [:ul
-   ;; for returns a seq
-   (for [his @(rf/subscribe [:get-history])]
-     [:li {:key (:y his)}                                   ;; stable and unique key
-      [:a (str (:x his) " " (str (:eq (:equation-map his))) " " (str (:y his)) " = " (str (:Total his)))]])])
+ ;(println (rf/subscribe [:get-history2]))
+(log/debug :history-list23 "blake about to send a dispatch to grab hisstory data")
+  (let [result @(rf/subscribe [:get-history])]
+    (doseq [[i var] result]
+      (map #([:span %]) var ))))
+
+ ;(println @(rf/subscribe [:get-history])))
+
 
 (defn History-tab []
+
 
   [:div
    [:h2 {:style {:position "relative"
@@ -141,7 +168,8 @@
         [:a "Basic-Math"]]
        [:li {:class    (if (= "History" all-complete) "is-active" "")
              :on-click (fn [response]
-                         (rf/dispatch [:switch-active-state "History"]))}
+                         (rf/dispatch [:switch-active-state "History"])
+                         (rf/dispatch [:getHistoryFromServer "sent"]))}
         [:a "History"]]]]
 
      [:div.tabs-content
@@ -234,9 +262,11 @@
 ;; Initialize app
 (defn ^:dev/after-load mount-components []
   (rf/clear-subscription-cache!)
+  (client-socket/get-data)
   (rdom/render [#'page] (.getElementById js/document "app")))
 
 (defn init! []
+  (client-socket/start!)
   (start-router!)
   (ajax/load-interceptors!)
   (mount-components))

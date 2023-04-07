@@ -10,7 +10,7 @@
         </encoder>
     </appender>
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>log/sample4.log</file>
+        <file>log/myapp.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>log/sample4.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
@@ -29,6 +29,11 @@
     <logger name="io.undertow.websockets.core.request" level="warn" />
     <logger name="io.undertow.request" level="warn" />
     <logger name="io.undertow.session" level="warn" />
+    <logger name="sample4" level="DEBUG"/>
+    <logger name="src/cljs" level="DEBUG"/>
+    <logger name="org.apache.kafka" level="WARN" />
+    <logger name="lojure.core.async.impl.channels.ManyToManyChannel" level="none" />
+    c
     <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />

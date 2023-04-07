@@ -1,8 +1,11 @@
 {
   "devDependencies": {
-    "shadow-cljs": "^2.16.5"
+    "shadow-cljs": "^2.22.9"
   },
   "dependencies": {
+    "browserify-fs": "^1.0.0",
+    "clojurescript-nodejs": "0.0.8",
+    "fs": "0.0.1-security",
     "highlight.js": "11.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"

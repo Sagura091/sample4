@@ -1,7 +1,9 @@
 {:nrepl {:port 7002}
+
  :builds
         {:app
                {:target     :browser
+                :dependencies  [cljs.nodejs "0.0.9"]
                 :output-dir "target/cljsbuild/public/js"
                 :asset-path "/js"
                 :modules    {:app {:entries [sample4.app]}}

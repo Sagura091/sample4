@@ -4,9 +4,9 @@
     [ajax.core :as ajax]
     [reitit.frontend.easy :as rfe]
     [re-frame.db :as db]
+    [lambdaisland.glogi :as log]
+    [sample4.sockets :as client-socket]
     [reitit.frontend.controllers :as rfc]
-    [sample4.corekafka :as kafka]
-    [sample4.corekafka :as kafka]
     [day8.re-frame.tracing :refer-macros [fn-traced]]))
 
 
@@ -18,7 +18,9 @@
     {:Name              "Math Database"                   ;; return a new value for app-db
      :History-Equations [{:id (inc 0) :x 1 :equation-map {:eq "-" :text "minus"} :y 4 :Total -3}]
      :Temp-Equation     {:x 0 :equation-map {:eq "-" :text "minus"} :y 0 :Total 0}
-     :Active-state      "calculator"}))
+     :Active-state      "calculator"
+     :conncetion          "NVM"}
+   ))
 
 
 
@@ -83,7 +85,13 @@
   (assoc-in test2 [:eq] (:temp test2))
 
 
+  (if (not= "sent" (get-in  @re-frame.db/app-db [:conncetion]))
+    (println "YO")   )
 
+    (fn []
+                                             (log/debug :starting-to-get-data "Blake Starting to get data")
+                                             (client-socket/get-data)
+                                             (assoc-in db [:conncetion] data))
 
   @re-frame.db/app-db
   ()
@@ -122,7 +130,6 @@
                            :response-format (ajax/json-response-format {:keywords? true})
                            :on-success      [:setTempDataTotal]
                            :on-failure      (fn [r] js/alert r)}}))
-
 
 
 (rf/reg-event-fx
@@ -173,11 +180,25 @@
 
 
 (rf/reg-event-db
+  :setHistoryFromServer
+  (fn-traced [db [_ data]]
+             (assoc-in db [:History-Equations (count (:History-Equations db))] data)))
+
+
+(rf/reg-event-db
+  :getHistoryFromServer
+  (fn-traced [db [_ data]]
+               (client-socket/get-data)
+             (assoc-in db [:conncetion] data)))
+
+
+(rf/reg-event-db
   :addToEquationHistory
   (fn-traced [db [_ _total]]
              (let [add (:Temp-Equation db)]
-               (kafka/math-problem-calculate! add)
-               (assoc-in db [:History-Equations (count (:History-Equations db))] add))))
+               (client-socket/send-data add)
+               (assoc-in db [:History-Equations (count (:History-Equations db))] add)
+              )))
 ; (conj (db :Temp-Equation) add))))
 
 ;(reset! db)))
@@ -221,6 +242,12 @@
   (fn-traced [db _]
              (:Total (:Temp-Equation db))))
 
+
+(rf/reg-sub
+  :get-history2
+  (fn-traced [db _]
+             (client-socket/get-data)
+             ))
 
 (rf/reg-sub
   :docs

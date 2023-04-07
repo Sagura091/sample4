@@ -4,6 +4,8 @@
              [jackdaw.client.log :as jcl]
              [jackdaw.admin :as ja]
              [jackdaw.serdes.edn :refer [serde]]
+             [lambdaisland.glogc :as log]
+             [clojure.java.shell :as shell]
              [willa.streams :refer [transduce-stream]]
              [willa.core :as w]
              [willa.viz :as wv]
@@ -47,16 +49,26 @@
 
 (defn math-problem-calculate! [calculation]
   (let [id (rand-int 1000)
-        X (get-in calculation [0])
-        Y (get-in calculation [2])
-        total 100]
+        X (get calculation :x)
+        Y (get calculation :y)
+        eq (get calculation :equation-map)
+        total (get calculation :Total)]
+    (def date (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") (new java.util.Date)))
+    (log/debug :kafka "blake" + (str calculation))
+   ;; (log/debug :kafka "blake X:" + (str calculation :x))
     (with-open [producer (jc/producer kafka-config serdes)]
       @(jc/produce! producer math-problem-calculate-topic id {:id id
+                                                              :date date
                                                               :x X
+                                                              :eq eq
                                                               :y Y
                                                               :total total}))))
 
-
+(defn topic-exists?
+  "Takes a topic name and returns true if the topic exists."
+  [topic-config]
+  (with-open [client (ja/->AdminClient kafka-config)]
+    (ja/topic-exists? client topic-config)))
 
 (defn simple-topology [builder]
 (-> (js/kstream builder math-problem-calculate-topic)
@@ -67,17 +79,22 @@
 
 (defn start! []
   "Starts the simple topology"
+
   (let [builder (js/streams-builder)]
     (simple-topology builder)
     (doto (js/kafka-streams builder kafka-config)
-      (js/start))))
+      (js/start))
+    (def kafka-streams-app builder))
+  (if (false? (topic-exists? math-problem-calculate-topic))
+        (ja/create-topics! admin-client [math-problem-calculate-topic])))
 
-(defn stop! [kafka-streams-app]
+(defn stop! []
   "Stops the given KafkaStreams application"
   (js/close kafka-streams-app))
 
 
-;; Start consuming messages
+
+
 
 
 (def topic-math
@@ -85,33 +102,22 @@
 
 
 
-(def consumer (jc/consumer {:bootstrap.servers "localhost:9092"
-                                 :group.id "Math"
-                                 :key.deserializer "org.apache.kafka.common.serialization.StringDeserializer"
-                                 :value.deserializer "org.apache.kafka.common.serialization.StringDeserializer"}))
 
-(jc/subscribe consumer [topic-math])
-
-(defn read-message []
-  (let [record (jc/poll consumer 1000)]
-    (if-let [r record]
-      (let [key (:key r)
-            topic (:topic r)
-            value (:value r)]
-        (println "Received message with topic " topic " key " key " value " value))
-      (println "No message received"))))
 
 (comment
 
   ;; Part 1 - Simple Topology
-
+  (def topic-name nil)
   (start!)
   ;; create the "purchase-made" and "large-transaction-made" topics
   (ja/create-topics! admin-client [math-problem-calculate-topic])
   (math-problem-calculate! [11 "+",25,30 ])
+  (ja/topic-exists? admin-client [{:keys ["Yo"] :as "math"}])
   (def totally (view-messages math-problem-calculate-topic))
+  (topic-exists? admin-client "Math")
+  (into [] totally)
   (println totally)
 
-
+  (topic-exists? math-problem-calculate-topic)
   ()
 )
