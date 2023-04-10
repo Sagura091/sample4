@@ -3,26 +3,13 @@
     [lambdaisland.glogi :as log]
     [cljs-node-io.core :as io]
     [re-frame.core :as rf]
-    [lambdaisland.glogi.console :as glogi-console]
-    [cljs.nodejs :as nodejs]
-    [cljs.core.async :as async]
-    [goog.fs :as fs]))
+    [lambdaisland.glogi.console :as glogi-console]))
 
 
-
-(defn write-to-file [file-path data]
-  (.getFile fs file-path
-            #(.createWriter %1
-                            (fn [writer]
-                              (let [blob (js/Blob. #js [data] {:type "text/plain"})]
-                                (.write writer blob))))))
 
 
 (defmulti event-msg-handler :id)
 
-(defn event-msg-handler
-  [{:as ev-msg :keys [id ?data event]}]
-  (event-msg-handler ev-msg))
 
 (defmethod event-msg-handler :default
   [{:keys [event]}]
@@ -49,18 +36,18 @@
   [{:keys [event]}]
   (log/info :some/broadcast event))
 
-(defmethod -event-msg-handler :chsk/ws-ping
+(defmethod event-msg-handler :chsk/ws-ping
   [{:keys [event]}]
   (log/info :ping event))
 
 
-(defmethod -event-msg-handler :some/history-view
+(defmethod event-msg-handler :some/history-view
   [{:keys [?data]}]
   (let [[event-type data] ?data]
     (log/debug :yobro "blake Yo bro in the client handler!!!! WOOOOOOO")
   (log/debug :some-history-view data)))
 
-(defmethod -event-msg-handler :some/history
+(defmethod event-msg-handler :some/history
   [{:keys [event]}]
   (log/info :some/history-view event))
 

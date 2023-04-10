@@ -60,6 +60,7 @@
 
 
 
+
 (defn input [input-name equation-key-re-frame equation-data]
   [:input.input.is-primary {:type        "text"
                             :placeholder input-name
