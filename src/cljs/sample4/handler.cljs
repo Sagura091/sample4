@@ -1,7 +1,6 @@
 (ns sample4.handler
   (:require
     [lambdaisland.glogi :as log]
-    [cljs-node-io.core :as io]
     [re-frame.core :as rf]
     [lambdaisland.glogi.console :as glogi-console]))
 

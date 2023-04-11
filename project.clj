@@ -33,8 +33,6 @@
 
                  [luminus/ring-ttl-session "0.3.3"]
                  [markdown-clj "1.11.3"]
-                 [luminus-jetty "0.2.3"]
-                 [info.sunng/ring-jetty9-adapter "0.19.0"]
                  [metosin/muuntaja "0.6.8"]
                  [metosin/reitit "0.5.18"]
                  [metosin/ring-http-response "0.9.3"]
@@ -118,9 +116,7 @@
                                  [compojure "1.7.0"]
                                  [aleph "0.6.1"]
                                  [com.lambdaisland/glogi "1.3.169"]
-                                 [luminus-jetty "0.2.3"]
                                  [luminus-http-kit "0.2.0"]
-                                 [info.sunng/ring-jetty9-adapter "0.19.0"]
                                  [day8.re-frame/tracing "0.6.2"]
                                  [day8.re-frame/re-frame-10x "1.5.0"]
                                  [day8.re-frame/tracing-stubs "0.5.3"]

@@ -133,10 +133,12 @@
 
 (defn History-list []
  ;(println (rf/subscribe [:get-history2]))
-(log/debug :history-list23 "blake about to send a dispatch to grab hisstory data")
-  (let [result @(rf/subscribe [:get-history])]
-    (doseq [[i var] result]
-      (map #([:span %]) var ))))
+(log/debug :history-list23 "blake about to send a dispatch to grab history data")
+  ;(let [result @(rf/subscribe [:get-history])]
+  ;  (doseq [[i var] result]
+  ;    (map #([:span %]) var )))
+  [:p "yoo"]
+  )
 
  ;(println @(rf/subscribe [:get-history])))
 
