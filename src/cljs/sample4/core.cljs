@@ -104,44 +104,33 @@
     [custom-button "=" :Get-Total-Eq-From-Server]
     [result]]])
 
-
-(comment
-
-  (def active-state (r/atom "calculator"))
-  (if (= :calculator @active-state) "is-active" "")
-  (reset! active-state "History")
-  (def vec-map [{:x 0 :y 1 :equation {:eq "-"}}])
-  (get-in vec-map [0 :equation :eq])
-  (:eq vec-map)
-
-
-
-
-
-  (def mapA [[1 {:a 12 :b 23}]
-   [2 {:a 12 :b 23}]
-  [3 {:a 12 :b 23}]
-   ])
-  (println mapA)
-  (doseq [[i k] mapA]
-    (doseq [[key val] k]
-      (print key))
-    (println k))
-
-  ())
-
-
-(defn History-list []
- ;(println (rf/subscribe [:get-history2]))
-(log/debug :history-list23 "blake about to send a dispatch to grab history data")
-  ;(let [result @(rf/subscribe [:get-history])]
-  ;  (doseq [[i var] result]
-  ;    (map #([:span %]) var )))
-  [:p "yoo"]
+(defn generate-row [data]
+  (print data)
+  [:tr   [:td (:date (second data))]
+   [:td (:x (second data))]
+   [:td (get-in (second data) [:eq :eq])]
+    [:td (:y (second data))]
+     [:td (:total (second data))]
+   ]
   )
 
- ;(println @(rf/subscribe [:get-history])))
+(defn generate-table [rows]
+  (print "History:")
+  (print rows)
+  (map generate-row rows)
+  (let [header [:tr [:th "Date "] [:th "X "] [:th "Op "] [:th "Y "] [:th "Total "]]
+        body (map generate-row rows)]
+    [:table header body])
+  )
 
+(defn History-list []
+(log/debug :history-list23 "blake about to send a dispatch to grab history data")
+  (let [history @(rf/subscribe [:get-history])]
+    ;(doseq [[i var] result]
+    ;  (map #([:span %]) var ))
+    (generate-table history)
+    )
+  )
 
 (defn History-tab []
 
@@ -161,10 +150,6 @@
     [:div {:class "container"}
      [:div.tabs.is-Large
       [:ul
-       [:li {:class    (if (= "calculator" all-complete) "is-active" "")
-             :on-click (fn [response] (rf/dispatch [:switch-active-state "calculator"]))}
-        [:a "calculator"]]
-
        [:li {:class    (if (= "Basic-Math" all-complete) "is-active" "")
              :on-click (fn [response]
                          (rf/dispatch [:switch-active-state "Basic-Math"]))}
@@ -172,7 +157,9 @@
        [:li {:class    (if (= "History" all-complete) "is-active" "")
              :on-click (fn [response]
                          (rf/dispatch [:switch-active-state "History"])
-                         (rf/dispatch [:getHistoryFromServer "sent"]))}
+                         (rf/dispatch [:resetHistory "reset history"])
+                         (rf/dispatch [:getHistoryFromServer "get history"])
+                         )}
         [:a "History"]]]]
 
      [:div.tabs-content
