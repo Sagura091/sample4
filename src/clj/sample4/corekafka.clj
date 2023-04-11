@@ -5,12 +5,7 @@
              [jackdaw.admin :as ja]
              [jackdaw.serdes.edn :refer [serde]]
              [lambdaisland.glogc :as log]
-             [clojure.java.shell :as shell]
              [willa.streams :refer [transduce-stream]]
-             [willa.core :as w]
-             [willa.viz :as wv]
-             [willa.experiment :as we]
-             [willa.specs :as ws]
             [clojure.spec.alpha :as s]))
 
 

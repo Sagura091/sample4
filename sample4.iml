@@ -26,8 +26,6 @@
     <orderEntry type="library" name="Leiningen: aleph:0.6.1" level="project" />
     <orderEntry type="library" name="Leiningen: aysylu/loom:1.0.2" level="project" />
     <orderEntry type="library" name="Leiningen: binaryage/devtools:1.0.6" level="project" />
-    <orderEntry type="library" name="Leiningen: boot/core:2.7.1" level="project" />
-    <orderEntry type="library" name="Leiningen: boot/pod:2.7.1" level="project" />
     <orderEntry type="library" name="Leiningen: borkdude/dynaload:0.2.2" level="project" />
     <orderEntry type="library" name="Leiningen: borkdude/edamame:0.0.18" level="project" />
     <orderEntry type="library" name="Leiningen: borkdude/sci.impl.reflector:0.0.1" level="project" />
@@ -65,7 +63,6 @@
     <orderEntry type="library" name="Leiningen: com.fasterxml.jackson.module/jackson-module-parameter-names:2.10.5" level="project" />
     <orderEntry type="library" name="Leiningen: com.github.everit-org.json-schema/org.everit.json.schema:1.12.2" level="project" />
     <orderEntry type="library" name="Leiningen: com.github.luben/zstd-jni:1.4.9-1" level="project" />
-    <orderEntry type="library" name="Leiningen: com.github.pkpkpk/cljs-node-io:2.0.332" level="project" />
     <orderEntry type="library" name="Leiningen: com.github.spullara.mustache.java/compiler:0.9.10" level="project" />
     <orderEntry type="library" name="Leiningen: com.google.code.findbugs/jsr305:3.0.2" level="project" />
     <orderEntry type="library" name="Leiningen: com.google.errorprone/error_prone_annotations:2.7.1" level="project" />
@@ -100,7 +97,6 @@
     <orderEntry type="library" name="Leiningen: day8.re-frame/re-frame-10x:1.5.0" level="project" />
     <orderEntry type="library" name="Leiningen: day8.re-frame/tracing-stubs:0.5.3" level="project" />
     <orderEntry type="library" name="Leiningen: day8.re-frame/tracing:0.6.2" level="project" />
-    <orderEntry type="library" name="Leiningen: degree9/nodejs-cljs:0.1.0" level="project" />
     <orderEntry type="library" name="Leiningen: expiring-map:0.1.9" level="project" />
     <orderEntry type="library" name="Leiningen: expound:0.9.0" level="project" />
     <orderEntry type="library" name="Leiningen: fipp:0.6.26" level="project" />
@@ -295,11 +291,9 @@
     <orderEntry type="library" name="Leiningen: org.ow2.asm/asm-commons:9.4" level="project" />
     <orderEntry type="library" name="Leiningen: org.ow2.asm/asm-tree:9.4" level="project" />
     <orderEntry type="library" name="Leiningen: org.ow2.asm/asm:9.2" level="project" />
-    <orderEntry type="library" name="Leiningen: org.projectodd.shimdandy/shimdandy-impl:1.2.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.rocksdb/rocksdbjni:5.18.4" level="project" />
     <orderEntry type="library" name="Leiningen: org.scala-lang/scala-library:2.13.1" level="project" />
     <orderEntry type="library" name="Leiningen: org.slf4j/slf4j-api:1.7.32" level="project" />
-    <orderEntry type="library" name="Leiningen: org.tcrawley/dynapath:0.2.5" level="project" />
     <orderEntry type="library" name="Leiningen: org.tukaani/xz:1.8" level="project" />
     <orderEntry type="library" name="Leiningen: org.webjars.npm/bulma:0.9.4" level="project" />
     <orderEntry type="library" name="Leiningen: org.webjars.npm/material-icons:1.10.8" level="project" />

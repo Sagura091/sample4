@@ -30,7 +30,7 @@
                  [luminus-http-kit "0.2.0"]
                  [aleph "0.6.1"]
                  [luminus-undertow "0.1.16"]
-                 [com.github.pkpkpk/cljs-node-io "2.0.332"]
+
                  [luminus/ring-ttl-session "0.3.3"]
                  [markdown-clj "1.11.3"]
                  [luminus-jetty "0.2.3"]
@@ -41,7 +41,7 @@
                  [org.apache.kafka/kafka-streams-test-utils "2.8.0"]
                  [mount "0.1.16"]
                  [clj-commons/fs "1.6.310"]
-                 [degree9/nodejs-cljs "0.1.0"]
+
                  [com.lambdaisland/glogi "1.3.169"]
                  [org.clojure/tools.logging "0.2.6"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
@@ -72,7 +72,6 @@
                  [thheller/shadow-cljs "2.20.3" :scope "provided"]]
 
   :min-lein-version "2.0.0"
-  :target :nodejs
   :source-paths ["src/clj" "src/cljs" "src/cljc"]
   :test-paths ["test/clj"]
   :resource-paths ["resources" "target/cljsbuild"]
@@ -103,12 +102,10 @@
                                  [org.clojure/tools.logging "0.3.1"]
                                  ; No need to specify slf4j-api, it’s required by logback
                                  [ch.qos.logback/logback-classic "1.1.3"]
-                                 [com.github.pkpkpk/cljs-node-io "2.0.332"]
                                  [prone "2021-04-23"]
                                  [day8.re-frame/http-fx "0.2.4"]
                                  [org.clojure/tools.logging "0.2.6"]
                                  [clj-commons/fs "1.6.310"]
-                                 [degree9/nodejs-cljs "0.1.0"]
                                  [com.lambdaisland/glogi "1.0.136"]
                                  [io.pedestal/pedestal.log  "0.5.9"]
                                  [ch.qos.logback/logback-classic "1.2.6"]
