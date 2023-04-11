@@ -178,11 +178,15 @@
   (fn-traced [db [_ switch]]
              (assoc-in db [:Active-state] switch)))
 
-
 (rf/reg-event-db
   :setHistoryFromServer
   (fn-traced [db [_ data]]
              (assoc-in db [:History-Equations (count (:History-Equations db))] data)))
+
+(rf/reg-event-db
+  :resetHistory
+  (fn-traced [db [_ data]]
+             (assoc-in db [:History-Equations] {})))
 
 
 (rf/reg-event-db
@@ -199,11 +203,6 @@
                (client-socket/send-data add)
                (assoc-in db [:History-Equations (count (:History-Equations db))] add)
               )))
-; (conj (db :Temp-Equation) add))))
-
-;(reset! db)))
-;;subscriptions
-
 
 (rf/reg-sub
   :common/route
