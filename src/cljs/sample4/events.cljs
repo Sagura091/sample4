@@ -64,58 +64,6 @@
 ; then with the handler of the get we send an event :set-eq to set that equation that was produced
 ; by the user to a database called db
 
-;(rf/reg-event-db
-;  :blah-response
-;  (fn [db [_ eventnumber result]]
-;    (assoc-in db [:Equation eventnumber :total] result)))
-
-(comment
-
-  (def m {:temp-eq {:x 0}})
-  (def test2 {:eq [{:x 10 :y 10}] :temp {:x 10 :y 12}})
-  (def test3 {:testw 24})
-  (test3 :testw)
-  (get-in (get m :temp-eq :x))
-  (assoc-in m [:temp-eq :x] 11)
-
-  ; (def test2 {:eq [{:x 10 :y 10}] :temp {:x 10 :y 12}})
-  ;(into [:eq (:temp test2)])
-  (conj (test2 :eq) {:d 0 :x 0})
-
-  (assoc-in test2 [:eq] (:temp test2))
-
-
-  (if (not= "sent" (get-in  @re-frame.db/app-db [:conncetion]))
-    (println "YO")   )
-
-    (fn []
-                                             (log/debug :starting-to-get-data "Blake Starting to get data")
-                                             (client-socket/get-data)
-                                             (assoc-in db [:conncetion] data))
-
-  @re-frame.db/app-db
-  ()
-
-  ())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 (rf/reg-event-fx
   :Get-Total-Eq-From-Server
   (fn-traced [{:keys [db]} [_ a]]
@@ -161,8 +109,6 @@
   (fn-traced [db [_ x]]
              (assoc-in db [:Temp-Equation :x] x)))
 
-
-
 (rf/reg-event-db
   :setTempDataY
   (fn-traced [db [_ y]]
@@ -192,15 +138,18 @@
 (rf/reg-event-db  ; grab data. Take out line 195
   :getHistoryFromServer
   (fn-traced [db [_ data]]
-              ;TODO; (client-socket/get-data)
-             (assoc-in db [:conncetion] data))
+              ;TODO:: get data from socket
+
+
+             (assoc-in db [:conncetion] data)))
 
 
 (rf/reg-event-db
   :addToEquationHistory
   (fn-traced [db [_ _total]]
              (let [add (:Temp-Equation db)]
-               (client-socket/send-data add)
+               ;TODO:: send the data using the socket
+
                (assoc-in db [:History-Equations (count (:History-Equations db))] add)
               )))
 
@@ -240,13 +189,6 @@
   :Get-Total
   (fn-traced [db _]
              (:Total (:Temp-Equation db))))
-
-
-(rf/reg-sub
-  :get-history2
-  (fn-traced [db _]
-             (client-socket/get-data)
-             ))
 
 (rf/reg-sub
   :docs

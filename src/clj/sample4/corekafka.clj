@@ -43,21 +43,17 @@
          doall)))
 
 (defn math-problem-calculate! [calculation]
-  (let [id (rand-int 1000)
-        X (get calculation :x)
-        Y (get calculation :y)
-        eq (get calculation :equation-map)
-        total (get calculation :Total)]
-    (def date (.format (java.text.SimpleDateFormat. "MM/dd/yyyy") (new java.util.Date)))
-    (log/debug :kafka "blake" + (str calculation))
-   ;; (log/debug :kafka "blake X:" + (str calculation :x))
+       ;TODO:: Send calculation with a producer to kafka
     (with-open [producer (jc/producer kafka-config serdes)]
-      @(jc/produce! producer math-problem-calculate-topic id {:id id
-                                                              :date date
-                                                              :x X
-                                                              :eq eq
-                                                              :y Y
-                                                              :ed 40}))))
+               ;TODO:: Replace with real data
+      @(jc/produce! producer math-problem-calculate-topic "Put-ID-here" {:id 1
+                                                              :date "4/17/2023"
+                                                              :x 2
+                                                              :eq "+"
+                                                              :y 2
+                                                              :total 4}))
+
+      )
 
 (defn topic-exists?
   "Takes a topic name and returns true if the topic exists."
@@ -87,32 +83,5 @@
   "Stops the given KafkaStreams application"
   (js/close kafka-streams-app))
 
-
-
-
-
-
 (def topic-math
   {:topic-name "math-problem-History"})
-
-
-
-
-
-(comment
-
-  ;; Part 1 - Simple Topology
-  (def topic-name nil)
-  (start!)
-  ;; create the "purchase-made" and "large-transaction-made" topics
-  (ja/create-topics! admin-client [math-problem-calculate-topic])
-  (math-problem-calculate! [11 "+",25,30 ])
-  (ja/topic-exists? admin-client [{:keys ["Yo"] :as "math"}])
-  (def totally (view-messages math-problem-calculate-topic))
-  (topic-exists? admin-client "Math")
-  (into [] totally)
-  (println totally)
-
-  (topic-exists? math-problem-calculate-topic)
-  ()
-)

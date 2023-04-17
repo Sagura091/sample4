@@ -13,22 +13,11 @@
 (defmethod event-msg-handler :default
   [{:keys [event]}]
   (log/info :unhandled-event event))
-
-(comment
-  (io/spit "~/Test.txt" "BLAKE YOU RULE" :append true)
-  ()
-
-  ())
 (defmethod event-msg-handler :chsk/recv
   [{:keys [?data]}]
   (let [[event-type data] ?data]
-    ;(println (into [] (get  data :history)))
-    ;(println (get-in ?data [1]))
-    ;TODO;
-    (cond
-      (contains? (get-in ?data [1]) :history)  (let [histoy-data (into [] (get  data :history))]
-                                                 (doseq [i histoy-data]
-                                                   (rf/dispatch [:setHistoryFromServer i]))))
+    ;TODO:: parse the history from the event and dispatch :setHistoryFromServer
+
     (log/info :push-event data)))
 
 
@@ -44,7 +33,6 @@
 (defmethod event-msg-handler :some/history-view
   [{:keys [?data]}]
   (let [[event-type data] ?data]
-    (log/debug :yobro "blake Yo bro in the client handler!!!! WOOOOOOO")
   (log/debug :some-history-view data)))
 
 (defmethod event-msg-handler :some/history
