@@ -189,11 +189,11 @@
              (assoc-in db [:History-Equations] {})))
 
 
-(rf/reg-event-db
+(rf/reg-event-db  ; grab data. Take out line 195
   :getHistoryFromServer
   (fn-traced [db [_ data]]
-               (client-socket/get-data)
-             (assoc-in db [:conncetion] data)))
+              ;TODO; (client-socket/get-data)
+             (assoc-in db [:conncetion] data))
 
 
 (rf/reg-event-db

@@ -24,6 +24,7 @@
   (let [[event-type data] ?data]
     ;(println (into [] (get  data :history)))
     ;(println (get-in ?data [1]))
+    ;TODO;
     (cond
       (contains? (get-in ?data [1]) :history)  (let [histoy-data (into [] (get  data :history))]
                                                  (doseq [i histoy-data]

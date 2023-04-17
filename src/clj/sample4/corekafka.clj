@@ -57,7 +57,7 @@
                                                               :x X
                                                               :eq eq
                                                               :y Y
-                                                              :total total}))))
+                                                              :ed 40}))))
 
 (defn topic-exists?
   "Takes a topic name and returns true if the topic exists."

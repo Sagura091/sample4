@@ -23,4 +23,5 @@
 (defmethod event-msg-handler :some/history-view
   [{:keys [event id ?data ring-req ?reply-fn send-fn]}]
   (log/debug :History-View "Blake tis is the server Grabbing data from topic in kafka")
-  (socket/send-data :some/history-view {:history (kafka/view-messages kafka/math-problem-calculate-topic)}))
+  ;TODO; (socket/send-data :some/history-view {:history (kafka/view-messages kafka/math-problem-calculate-topic)}))
+  )

@@ -158,7 +158,7 @@
              :on-click (fn [response]
                          (rf/dispatch [:switch-active-state "History"])
                          (rf/dispatch [:resetHistory "reset history"])
-                         (rf/dispatch [:getHistoryFromServer "get history"])
+                         (rf/dispatch [:getHistoryFromServer "connected get history"])
                          )}
         [:a "History"]]]]
 
