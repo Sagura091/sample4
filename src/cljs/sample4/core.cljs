@@ -18,13 +18,6 @@
     [clojure.string :as string])
   (:import goog.History))
 
-
-
-
-
-
-
-
 (defn nav-link [uri title page]
   [:a.navbar-item
    {:href   uri
@@ -84,14 +77,6 @@
                         (and (>= @(rf/subscribe [:Get-Total]) 20) (<= 49 @(rf/subscribe [:Get-Total])) "#1684fac9"))}}
    @(rf/subscribe [:Get-Total])])
 
-
-
-
-
-
-
-
-
 (defn equation-tab []
 
   [:div.column {:class "column is-four-fifths"}
@@ -124,17 +109,12 @@
   )
 
 (defn History-list []
-(log/debug :history-list23 "blake about to send a dispatch to grab history data")
   (let [history @(rf/subscribe [:get-history])]
-    ;(doseq [[i var] result]
-    ;  (map #([:span %]) var ))
     (generate-table history)
     )
   )
 
 (defn History-tab []
-
-
   [:div
    [:h2 {:style {:position "relative"
                  :left     80
@@ -145,7 +125,6 @@
 
 (defn math-page []
 
-  (println @(rf/subscribe [:Active-state]))
   (let [all-complete @(rf/subscribe [:Active-state])]
     [:div {:class "container"}
      [:div.tabs.is-Large
@@ -194,9 +173,6 @@
   [:div.select
    [:select {
              :id        "selector"
-             ;:on-change (fn [event]
-
-             ;(println event :selected)
              :on-change (fn [event]
                           (rf/dispatch [:setTempDataEquation
                                         {:eq (-> event .-target .-value)
