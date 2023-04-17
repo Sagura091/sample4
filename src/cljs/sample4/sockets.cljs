@@ -40,6 +40,6 @@
   (@chsk-send! [:some/history data]))
 
 (defn get-data []
-  (log/debug :reframe-Get-data " blake Trying to get data from the server")
+  (log/debug :reframe-Get-data "Trying to get data from the server")
   (@chsk-send! [:some/history-view]))
 
